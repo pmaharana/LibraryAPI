@@ -60,7 +60,51 @@ namespace LibraryAPI.Models
 
             }
         }
+
+        public static void AddABook(string connectionString, Library libraryBook)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var text = @"insert into [Catalog] (Title, Author, YearPublished) 
+                    values  (@Title, @Author, @YearPublished)";
+
+                var cmd = new SqlCommand(text, connection);
+
+                cmd.Parameters.AddWithValue("@Title", libraryBook.Title);
+                cmd.Parameters.AddWithValue("@Author", libraryBook.Author);
+                cmd.Parameters.AddWithValue("@YearPublished", libraryBook.YearPublished);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public static void UpdateABook(string connectionString, Library libraryBook)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var text = @"UPDATE [Catalog] " +
+               " SET Genre=@Genre, IsCheckedOut=@IsCheckedOut " +
+               " WHERE Id=@Id ";
+
+                var cmd = new SqlCommand(text, connection);
+
+                cmd.Parameters.AddWithValue("@Genre", libraryBook.Genre);
+                cmd.Parameters.AddWithValue("@IsCheckedOut", libraryBook.IsCheckedOut);
+                cmd.Parameters.AddWithValue("@Id", libraryBook.Id);
+                
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+
+        }
+
+           
+
     }
 
+    
     
 }

@@ -26,34 +26,28 @@ namespace LibraryAPI.Controllers
             return Library.GetAllBooks(connectionString);
         }
 
-        [HttpGet]
-        public IHttpActionResult GetBook(int id)
-        {
-            var book = Library.GetAllBooks(connectionString).FirstOrDefault(f => f.Id == id);
-            return Ok(book);
-        }
+        //[HttpGet]
+        //public IHttpActionResult GetBook(int id)
+        //{
+        //    var book = Library.GetAllBooks(connectionString).FirstOrDefault(f => f.Id == id);
+        //    return Ok(book);
+        //}
 
         [HttpPut]
         public IHttpActionResult CreateBook([FromBody]Library libraryBook)
         {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var text = @"insert into [Catalog] (Title, Author, YearPublished) 
-                    values  (@Title, @Author, @YearPublished)";
-
-                var cmd = new SqlCommand(text, connection);
-                
-                cmd.Parameters.AddWithValue("@Title", libraryBook.Title);
-                cmd.Parameters.AddWithValue("@Author", libraryBook.Author);
-                cmd.Parameters.AddWithValue("@YearPublished", libraryBook.YearPublished);
-                connection.Open();
-                cmd.ExecuteNonQuery();
-                connection.Close();
-
-            }
-
+            Library.AddABook(connectionString, libraryBook);
             return Ok(libraryBook);
+          
         }
+
+        [HttpPost]
+        public IHttpActionResult UpdateBook([FromBody]Library libraryBook)
+        {
+            Library.UpdateABook(connectionString, libraryBook);
+            return Ok(Library.GetAllBooks(connectionString));  //returns all the results so I can see whats updated
+        }
+
 
 
 
