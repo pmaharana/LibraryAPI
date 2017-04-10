@@ -21,38 +21,38 @@ namespace LibraryAPI.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Library> GetLibraryInfo()
+        public IEnumerable<Book> GetLibraryInfo()
         {
-            return Library.GetAllBooks(connectionString);
+            return Book.GetAllBooks(connectionString);
         }
 
         //[HttpGet]
         //public IHttpActionResult GetBook(int id)
         //{
-        //    var book = Library.GetAllBooks(connectionString).FirstOrDefault(f => f.Id == id);
+        //    var book = Book.GetBook(connectionString, id);
         //    return Ok(book);
         //}
 
         [HttpPut]
-        public IHttpActionResult CreateBook([FromBody]Library libraryBook)
+        public IHttpActionResult CreateBook([FromBody]Book libraryBook)
         {
-            Library.AddABook(connectionString, libraryBook);
+            Book.AddABook(connectionString, libraryBook);
             return Ok(libraryBook);
 
         }
 
         [HttpPost]
-        public IHttpActionResult UpdateBook([FromBody]Library libraryBook)
+        public IHttpActionResult UpdateBook([FromBody]Book libraryBook)
         {
-            Library.UpdateABook(connectionString, libraryBook);
-            return Ok(Library.GetAllBooks(connectionString));  //returns all the results so I can see whats updated
+            Book.UpdateABook(connectionString, libraryBook);
+            return Ok(Book.GetAllBooks(connectionString));  //returns all the results so I can see whats updated
         }
 
         [HttpDelete]
-        public IHttpActionResult DeleteBook([FromBody]Library libraryBook)
+        public IHttpActionResult DeleteBook([FromBody]Book libraryBook)
         {
-            Library.DeleteABook(connectionString, libraryBook);
-            return Ok(Library.GetAllBooks(connectionString));
+            Book.DeleteABook(connectionString, libraryBook);
+            return Ok(Book.GetAllBooks(connectionString));
         }
 
 

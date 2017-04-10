@@ -6,7 +6,7 @@ using System.Web;
 
 namespace LibraryAPI.Models
 {
-    public class Library
+    public class Book
     {
         private SqlDataReader reader;
 
@@ -19,12 +19,12 @@ namespace LibraryAPI.Models
         public string LastCheckedOutDate { get; set; }
         //public DateTime DueBackDate { get; set; }
 
-        public Library()  //base constructor
+        public Book()  //base constructor
         {
 
         }
 
-        public Library(SqlDataReader reader)  //adding to Library constructor
+        public Book(SqlDataReader reader)  //adding to Library constructor
         {
             Id = (int)reader[0];
             Title = reader[1].ToString();
@@ -37,22 +37,22 @@ namespace LibraryAPI.Models
         }
 
 
-        public static List<Library> GetAllBooks(string connectionString)
+        public static List<Book> GetAllBooks(string connectionString)
         {
             
 
-            var books = new List<Library>();  //created a new list to store each book added
+            var books = new List<Book>();  //created a new list to store each book added
             using (var connection = new SqlConnection(connectionString))
             {
                 var text = @"select Id, Title, Author, YearPublished, Genre, IsCheckedOut, LastCheckedOutDate
-            from Catalog";
+            from Catalog ";
                 var sqlCommand = new SqlCommand(text, connection);
                 connection.Open();
                 var reader = sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    var book = new Library(reader);
+                    var book = new Book(reader);
                     books.Add(book);
                 }
                 connection.Close();
@@ -61,7 +61,33 @@ namespace LibraryAPI.Models
             }
         }
 
-        public static void AddABook(string connectionString, Library libraryBook)
+        public static List<Book> GetABook(string connectionString, int bookId)
+        {
+
+
+            var books = new List<Book>();  
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var text = @"select Id, Title, Author, YearPublished, Genre, IsCheckedOut, LastCheckedOutDate
+            from Catalog where Id = @Id";
+                var sqlCommand = new SqlCommand(text, connection);
+                sqlCommand.Parameters.AddWithValue("@Id", bookId);
+                connection.Open();
+                var reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var book = new Book(reader);
+                    books.Add(book);
+                }
+                connection.Close();
+                return books;
+
+            }
+        }
+
+
+        public static void AddABook(string connectionString, Book libraryBook)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -79,7 +105,7 @@ namespace LibraryAPI.Models
             }
         }
 
-        public static void UpdateABook(string connectionString, Library libraryBook)
+        public static void UpdateABook(string connectionString, Book libraryBook)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -101,7 +127,7 @@ namespace LibraryAPI.Models
 
         }
 
-        public static void DeleteABook(string connectionString, Library libraryBook)
+        public static void DeleteABook(string connectionString, Book libraryBook)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -120,8 +146,26 @@ namespace LibraryAPI.Models
 
         }
 
-           
+        //public static void CheckOutBook(string connectionString, Library libraryBook)
+        //{
+        //    using (var connection = new SqlConnection(connectionString))
+        //    {
+        //        var text = @"select Id, Title, Author, YearPublished, Genre, IsCheckedOut, LastCheckedOutDate
+        //    from Catalog";
+        //        var sqlCommand = new SqlCommand(text, connection);
+        //        connection.Open();
+        //        var reader = sqlCommand.ExecuteReader();
 
+        //        while (reader.Read())
+        //        {
+        //            if (IsCheckedOut == "False")
+        //            {
+
+        //            }
+        //        }
+        //        connection.Close();
+        //    }
+        //}
     }
 
     
