@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace LibraryAPI.Controllers
-{   
+{
 
     public class LibraryController : ApiController
     {
@@ -16,7 +16,7 @@ namespace LibraryAPI.Controllers
         const string connectionString =
                 @"Server=localhost\SQLEXPRESS;Database=LibraryAPI;Trusted_Connection=True;";
 
-        
+
 
 
 
@@ -38,7 +38,7 @@ namespace LibraryAPI.Controllers
         {
             Library.AddABook(connectionString, libraryBook);
             return Ok(libraryBook);
-          
+
         }
 
         [HttpPost]
@@ -48,14 +48,19 @@ namespace LibraryAPI.Controllers
             return Ok(Library.GetAllBooks(connectionString));  //returns all the results so I can see whats updated
         }
 
-
-
-
-
-
+        [HttpDelete]
+        public IHttpActionResult DeleteBook([FromBody]Library libraryBook)
+        {
+            Library.DeleteABook(connectionString, libraryBook);
+            return Ok(Library.GetAllBooks(connectionString));
+        }
 
 
 
     }
+
+
+
+
 
 }

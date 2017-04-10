@@ -101,6 +101,25 @@ namespace LibraryAPI.Models
 
         }
 
+        public static void DeleteABook(string connectionString, Library libraryBook)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var text = @"DELETE " +
+                                    " FROM [Catalog] " +
+                                    " WHERE Id=@Id";
+
+                var cmd = new SqlCommand(text, connection);
+
+                cmd.Parameters.AddWithValue("@ID", libraryBook.Id);
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+
+        }
+
            
 
     }
