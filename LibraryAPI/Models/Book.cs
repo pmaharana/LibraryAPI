@@ -16,8 +16,8 @@ namespace LibraryAPI.Models
         public int YearPublished { get; set; }
         public string Genre { get; set; }
         public string IsCheckedOut { get; set; }
-        public string LastCheckedOutDate { get; set; }
-        //public DateTime DueBackDate { get; set; }
+        public DateTime? LastCheckedOutDate { get; set; }
+        public DateTime? DueBackDate { get; set; }
 
         public Book()  //base constructor
         {
@@ -32,8 +32,8 @@ namespace LibraryAPI.Models
             YearPublished = (int)reader[3];
             Genre = reader[4].ToString();
             IsCheckedOut = reader[5].ToString();
-            LastCheckedOutDate = reader[6].ToString();
-
+            LastCheckedOutDate = (DateTime?)reader[6];
+            DueBackDate = reader[7] as DateTime?;
         }
 
 
@@ -44,7 +44,7 @@ namespace LibraryAPI.Models
             var books = new List<Book>();  //created a new list to store each book added
             using (var connection = new SqlConnection(connectionString))
             {
-                var text = @"select Id, Title, Author, YearPublished, Genre, IsCheckedOut, LastCheckedOutDate
+                var text = @"select * 
             from Catalog ";
                 var sqlCommand = new SqlCommand(text, connection);
                 connection.Open();
